@@ -23,15 +23,18 @@ class User {
   }
 
   factory User({String name, String email, String phone}) {
-    if (name.isEmpty) throw Exception('User name is empty');
-    if (email.isEmpty || phone.isEmpty)
+    email ??= '';
+    phone ??= '';
+
+    if (name?.isEmpty == true) throw Exception('User name is empty');
+    if (email.isEmpty && phone.isEmpty)
       throw Exception('phone or email is empty');
 
     return User._internal(
       firstName: _getFirstName(name),
       lastName: _getLastName(name),
-      phone: _checkPhone(phone),
-      email: _checkEmail(email),
+      phone: phone.isEmpty ? null : _checkPhone(phone),
+      email: email.isEmpty ? null : _checkEmail(email),
     );
   }
 
@@ -40,14 +43,14 @@ class User {
   static String _getLastName(String userName) => userName.split(' ')[1];
 
   static String _checkPhone(String phone) {
-    String checkPattern = r'^(?:[+0])?[0-9]{11}';
-    String clearPattern = r'[^+\\d]';
+    RegExp checkPattern = RegExp(r'^(?:[+0])?[0-9]{11}');
+    RegExp clearPattern = RegExp(r'[^+\d]');
 
-    phone = phone.replaceAll(clearPattern, '');
+    phone = phone.replaceAll(clearPattern, "");
 
     if (phone == null || phone.isEmpty) {
       throw Exception('Enter don\'t empty phone number');
-    } else if (!RegExp(checkPattern).hasMatch(phone)) {
+    } else if (!checkPattern.hasMatch(phone)) {
       throw Exception(
           'Enter a valid phone number starting with + and containing 11 digits');
     }
@@ -58,6 +61,8 @@ class User {
   static String _checkEmail(String email) {
     if (email == null || email.isEmpty) {
       throw Exception('Enter don\'t empty email number');
+    } else if (!email.contains('@')) {
+      throw Exception('Email is not valid');
     }
 
     return email;
@@ -100,7 +105,7 @@ class User {
 
     if (object is User) {
       return _firstName == object._firstName &&
-          _lastName == object._firstName &&
+          _lastName == object._lastName &&
           (phone == object.phone || email == object.email);
     }
   }
