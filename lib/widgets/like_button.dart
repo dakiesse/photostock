@@ -2,24 +2,24 @@ import 'package:FlutterGalleryApp/res/res.dart';
 import 'package:flutter/material.dart';
 
 class LikeButton extends StatefulWidget {
-  bool active;
+  bool isLiked;
   int likeCount;
 
-  LikeButton(this.likeCount, this.active, {Key key}) : super(key: key);
+  LikeButton({Key key, @required this.likeCount, @required this.isLiked}) : super(key: key);
 
   @override
   _LikeButtonState createState() => _LikeButtonState();
 }
 
 class _LikeButtonState extends State<LikeButton> {
-  bool active;
+  bool isLiked;
   int likeCount;
 
   @override
   void initState() {
     super.initState();
 
-    active = widget.active;
+    isLiked = widget.isLiked;
     likeCount = widget.likeCount;
   }
 
@@ -33,9 +33,14 @@ class _LikeButtonState extends State<LikeButton> {
           padding: const EdgeInsets.all(8),
           child: Row(
             children: <Widget>[
-              Icon(active ? AppIcons.like_fill : AppIcons.like),
+              Icon(isLiked ? AppIcons.like_fill : AppIcons.like),
               SizedBox(width: 4),
-              Text(likeCount.toString()),
+              SizedBox(
+                width: 10,
+                child: Center(
+                  child: Text(likeCount.toString()),
+                ),
+              ),
             ],
           ),
         ),
@@ -45,9 +50,9 @@ class _LikeButtonState extends State<LikeButton> {
 
   void _handlerTap() {
     setState(() {
-      active = !active;
+      isLiked = !isLiked;
 
-      if (active)
+      if (isLiked)
         likeCount++;
       else
         likeCount--;
