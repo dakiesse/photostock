@@ -23,7 +23,7 @@ class _FeedScreenState extends State<FeedScreen> {
         itemBuilder: (BuildContext context, int index) {
           return Column(
             children: <Widget>[
-              _buildItem(),
+              _buildItem(index),
               Divider(
                 thickness: 2,
                 color: AppColors.mercury,
@@ -35,14 +35,19 @@ class _FeedScreenState extends State<FeedScreen> {
     );
   }
 
-  Widget _buildItem() {
+  Widget _buildItem(int index) {
+    String heroTag = 'heroTag' + index.toString();
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       child: GestureDetector(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Photo(photoLink: kFlutterDash),
+            Hero(
+              tag: heroTag,
+              child: Photo(photoLink: kFlutterDash),
+            ),
             _buildMeta(),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 5),
@@ -57,16 +62,18 @@ class _FeedScreenState extends State<FeedScreen> {
         ),
         onTap: () {
           Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (BuildContext builder) => FullScreenImage(
-                  name: 'Dany',
-                  userName: 'Danysa as das das',
-                  altDescription: 'Lorem lorem em lorem ',
-                  photo:
-                      'https://images.reverb.com/image/upload/s--nZqXbwfo--/f_auto,t_supersize/v1553393429/f41zqwml49difis3yvfp.jpg',
-                ),
-              ));
+            context,
+            MaterialPageRoute(
+              builder: (BuildContext builder) => FullScreenImage(
+                name: 'Dany',
+                userName: 'Danysa as das das',
+                altDescription: 'Lorem lorem em lorem ',
+                userPhoto: 'https://skill-branch.ru/img/speakers/Adechenko.jpg',
+                photo: kFlutterDash,
+                heroTag: heroTag,
+              ),
+            ),
+          );
         },
       ),
     );
